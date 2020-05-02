@@ -31,3 +31,18 @@ def and_operation(request):
         ]
     })
 
+
+def or_operation(request):
+    # https://davit.tech/django-queryset-examples/#section-or
+    qs1 = User.objects.filter(Q(first_name="John") | Q(first_name="Jane"))
+    qs2 = User.objects.filter(first_name="John") | User.objects.filter(first_name="Jane")
+
+    return JsonResponse({
+        name: {
+            'data': list(qs.values()),
+            'query': str(qs.query),
+        } for name, qs in [
+            ('qs1', qs1),
+            ('qs2', qs2),
+        ]
+    })
