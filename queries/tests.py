@@ -1,3 +1,5 @@
+import json
+
 from django.test import TestCase
 import logging
 
@@ -20,3 +22,15 @@ class TestViews(TestCase):
         data = response.json()
         self.assertEqual(2, len(data['users']))
 
+    def test__and_operation(self):
+        with self.assertNumQueries(4):
+            response = self.client.get('/queries/and_operation')
+        self.assertEqual(200, response.status_code)
+        data = response.json()
+
+        # check that the result and SQL query is the same in all querysets
+        query_results = set([json.dumps(qs['data']) for qs in data.values()])
+        sqls = set([qs['query'] for qs in data.values()])
+
+        self.assertEqual(1, len(query_results))
+        self.assertEqual(1, len(sqls))
