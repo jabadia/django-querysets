@@ -6,4 +6,5 @@ def first(request):
     users = User.objects.all()
     return JsonResponse({
         'users': list(users.values()),
+        'query': str(users.query),
     })
