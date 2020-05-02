@@ -47,3 +47,16 @@ class TestViews(TestCase):
 
         self.assertEqual(1, len(query_results))
         self.assertEqual(1, len(sqls))
+
+    def test__not_equal(self):
+        with self.assertNumQueries(2):
+            response = self.client.get('/queries/not_equal')
+        self.assertEqual(200, response.status_code)
+        data = response.json()
+
+        # check that the result and SQL query is the same in all querysets
+        query_results = set([json.dumps(qs['data']) for qs in data.values()])
+        sqls = set([qs['query'] for qs in data.values()])
+
+        self.assertEqual(1, len(query_results))
+        self.assertEqual(1, len(sqls))

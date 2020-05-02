@@ -6,4 +6,5 @@ urlpatterns = [
     path('first', views.first),
     path('and_operation', views.and_operation),
     path('or_operation', views.or_operation),
+    path('not_equal', views.not_equal),
 ]

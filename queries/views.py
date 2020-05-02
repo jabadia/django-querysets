@@ -46,3 +46,19 @@ def or_operation(request):
             ('qs2', qs2),
         ]
     })
+
+
+def not_equal(request):
+    # https://davit.tech/django-queryset-examples/#section-not-equal
+    qs1 = User.objects.filter(~Q(first_name="John"))
+    qs2 = User.objects.exclude(first_name="John")
+
+    return JsonResponse({
+        name: {
+            'data': list(qs.values()),
+            'query': str(qs.query),
+        } for name, qs in [
+            ('qs1', qs1),
+            ('qs2', qs2),
+        ]
+    })
