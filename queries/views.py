@@ -1,7 +1,9 @@
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 
 def first(request):
+    users = User.objects.all()
     return JsonResponse({
-        'data': {}
+        'users': list(users.values()),
     })
