@@ -2,17 +2,36 @@
 
 from django.db import migrations
 
+USERS = [
+    {
+        'username': 'john.doe',
+        'email': 'john.doe@example.com',
+        'password': '*',
+        'first_name': 'John',
+        'last_name': 'Doe',
+        'is_active': True,
+    },
+    {
+        'username': 'jane.doe',
+        'email': 'jane.doe@example.com',
+        'password': '*',
+        'first_name': 'Jane',
+        'last_name': 'Doe',
+        'is_active': False,
+    },
+]
+
 
 def create_users(apps, schema_editor):
     from django.contrib.auth.models import User  # we want methods from User, so we need to import the actual model
-    # UserModel = apps.get_model('auth', 'User')
-    for i in range(30):
-        User.objects.create_user(f'user{i}', f'user{i}@example.com', '***')
+    for user in USERS:
+        User.objects.create_user(**user)
 
 
 def delete_users(apps, schema_editor):
     UserModel = apps.get_model('auth', 'User')
-    UserModel.objects.filter(email__endswith='@example.com').delete()
+    usernames = [user['username'] for user in USERS]
+    UserModel.objects.filter(username__in=usernames).delete()
 
 
 class Migration(migrations.Migration):
