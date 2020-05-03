@@ -165,3 +165,21 @@ class TestViews(TestCase):
         self.assertEqual(5, len(data['groups_with_users_qs']['data']))
         self.assertIn('JOIN "auth_user_groups"', data['groups_with_users_qs']['query'])
         self.assertIn('JOIN "auth_user"', data['groups_with_users_qs']['query'])
+
+    def test__annotations(self):
+        with self.assertNumQueries(3):
+            response = self.client.get('/queries/annotations')
+        self.assertEqual(200, response.status_code)
+        data = response.json()
+
+        self.assertEqual(4, len(data['groups_with_user_count_qs']['data']))
+        self.assertIn('COUNT("auth_user"."username")', data['groups_with_user_count_qs']['query'])
+        self.assertIn('GROUP BY "auth_group"."id"', data['groups_with_user_count_qs']['query'])
+
+        self.assertEqual(2, len(data['users_with_group_count_qs']['data']))
+        self.assertIn('COUNT("auth_user_groups"."group_id")', data['users_with_group_count_qs']['query'])
+        self.assertIn('GROUP BY "auth_user"."id"', data['users_with_group_count_qs']['query'])
+
+        self.assertEqual(2, len(data['users_with_group_array_qs']['data']))
+        self.assertIn('ARRAY_AGG("auth_group"."name" )', data['users_with_group_array_qs']['query'])
+        self.assertIn('GROUP BY "auth_user"."id"', data['users_with_group_array_qs']['query'])

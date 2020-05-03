@@ -2,11 +2,12 @@ import logging
 from datetime import timedelta
 
 import django.urls as urls
+from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import connection
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.forms import model_to_dict
 from django.http import JsonResponse, HttpResponse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.shortcuts import render
 from django.test.utils import CaptureQueriesContext
 from django.utils import timezone
@@ -245,5 +246,28 @@ def joins(request):
         } for name, qs in [
             ('users_with_group_name_qs', users_with_group_name_qs),
             ('groups_with_users_qs', groups_with_users_qs),
+        ]
+    })
+
+
+def annotations(request):
+    groups_with_user_count_qs = Group.objects.all().annotate(
+        user_count=Count('user__username')
+    ).values('name', 'user_count')
+    users_with_group_count_qs = User.objects.all().annotate(
+        group_count=Count('groups')
+    ).values('username', 'group_count')
+    users_with_group_array_qs = User.objects.all().annotate(
+        group_names=ArrayAgg('groups__name')  # needs PostgreSQL
+    ).values('username', 'group_names')
+
+    return JsonResponse({
+        name: {
+            'data': list(qs),
+            'query': str(qs.query),
+        } for name, qs in [
+            ('groups_with_user_count_qs', groups_with_user_count_qs),
+            ('users_with_group_count_qs', users_with_group_count_qs),
+            ('users_with_group_array_qs', users_with_group_array_qs),
         ]
     })
