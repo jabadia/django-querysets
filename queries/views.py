@@ -1,15 +1,24 @@
 import logging
 from datetime import timedelta
 
+import django.urls as urls
 from django.db import connection
 from django.db.models import Q
 from django.forms import model_to_dict
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.models import User
+from django.shortcuts import render
 from django.test.utils import CaptureQueriesContext
 from django.utils import timezone
 
 logger = logging.getLogger(__name__)
+
+
+def index(request):
+    resolver = urls.get_resolver()
+    all_urls = ['/' + v[0][0][0] for v in resolver.reverse_dict.values()]
+    all_urls.reverse()
+    return render(request, 'queries/index.html', {'urls': all_urls})
 
 
 def first(request):
