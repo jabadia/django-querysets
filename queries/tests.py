@@ -91,3 +91,18 @@ class TestViews(TestCase):
         self.assertEqual(1, len(data['contains_qs']['data']))
         self.assertIn("REGEXP ^D.e$", data['regex_qs']['query'])
         self.assertEqual(2, len(data['regex_qs']['data']))
+
+    def test__comparison(self):
+        with self.assertNumQueries(4):
+            response = self.client.get('/queries/comparison')
+        self.assertEqual(200, response.status_code)
+        data = response.json()
+
+        self.assertIn(" > ", data['gt_qs']['query'])
+        self.assertEqual(0, len(data['gt_qs']['data']))
+        self.assertIn(" < ", data['lt_qs']['query'])
+        self.assertEqual(1, len(data['lt_qs']['data']))
+        self.assertIn(" >= ", data['gte_qs']['query'])
+        self.assertEqual(1, len(data['gte_qs']['data']))
+        self.assertIn(" <= ", data['lte_qs']['query'])
+        self.assertEqual(2, len(data['lte_qs']['data']))

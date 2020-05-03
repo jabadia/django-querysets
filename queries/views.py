@@ -124,3 +124,23 @@ def like(request):
             ('regex_qs', regex_qs),
         ]
     })
+
+
+def comparison(request):
+    # https://davit.tech/django-queryset-examples/#section-comparsion
+    gt_qs = User.objects.filter(id__gt=2)
+    lt_qs = User.objects.filter(id__lt=2)
+    gte_qs = User.objects.filter(id__gte=2)
+    lte_qs = User.objects.filter(id__lte=2)
+
+    return JsonResponse({
+        name: {
+            'data': list(qs.values()),
+            'query': str(qs.query),
+        } for name, qs in [
+            ('gt_qs', gt_qs),
+            ('lt_qs', lt_qs),
+            ('gte_qs', gte_qs),
+            ('lte_qs', lte_qs),
+        ]
+    })
