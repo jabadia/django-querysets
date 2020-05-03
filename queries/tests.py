@@ -59,5 +59,10 @@ class TestViews(TestCase):
         self.assertEqual(200, response.status_code)
         data = response.json()
 
-        self._assert_all_results_and_sqls_equal(data)
+        self.assertEqual(1, len(data['qs']['data']))
+        self.assertEqual(1, len(data['bulk']['data']))
+
+        self.assertCountEqual(data['qs']['data'], data['bulk']['data'].values())
+        self.assertEqual(data['qs']['query'], data['bulk']['query'])
+
 

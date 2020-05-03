@@ -1,7 +1,13 @@
+import logging
+
+from django.db import connection
 from django.db.models import Q
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from django.test.utils import CaptureQueriesContext
+
+logger = logging.getLogger(__name__)
 
 
 def first(request):
@@ -68,13 +74,18 @@ def not_equal(request):
 def in_filtering(request):
     # https://davit.tech/django-queryset-examples/#section-in
     qs = User.objects.filter(pk__in=[1, 4, 7])
-    bulk = User.objects.in_bulk([1, 4, 7])
-    # for k, v in bulk.items():
-    #     bulk[k] = model_to_dict(v)
+    with CaptureQueriesContext(connection) as ctx:
+        bulk = User.objects.in_bulk([1, 4, 7])
+        for k, v in bulk.items():
+            bulk[k] = model_to_dict(v, exclude=['groups', 'user_permissions'])
+    assert len(ctx.captured_queries) == 1, "bad number of queries executed"
     return JsonResponse({
         'qs': {
             'data': list(qs.values()),
             'query': str(qs.query),
         },
-        # 'bulk': bulk,
+        'bulk': {
+            'data': bulk,
+            'query': ctx.captured_queries[0]['sql'],
+        }
     })
