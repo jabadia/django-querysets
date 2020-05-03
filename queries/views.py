@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 
@@ -61,4 +62,19 @@ def not_equal(request):
             ('qs1', qs1),
             ('qs2', qs2),
         ]
+    })
+
+
+def in_filtering(request):
+    # https://davit.tech/django-queryset-examples/#section-in
+    qs = User.objects.filter(pk__in=[1, 4, 7])
+    bulk = User.objects.in_bulk([1, 4, 7])
+    # for k, v in bulk.items():
+    #     bulk[k] = model_to_dict(v)
+    return JsonResponse({
+        'qs': {
+            'data': list(qs.values()),
+            'query': str(qs.query),
+        },
+        # 'bulk': bulk,
     })
