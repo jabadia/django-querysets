@@ -151,3 +151,17 @@ class TestViews(TestCase):
         self.assertIn('ORDER BY "auth_user"."first_name" DESC LIMIT 1', data['user_using_last']['query'])
         self.assertIn('ORDER BY "auth_user"."date_joined" ASC, "auth_user"."first_name" DESC LIMIT 1', data['user_using_earliest']['query'])
         self.assertIn('ORDER BY "auth_user"."first_name" DESC LIMIT 1', data['user_using_latest']['query'])
+
+    def test__joins(self):
+        with self.assertNumQueries(2):
+            response = self.client.get('/queries/joins')
+        self.assertEqual(200, response.status_code)
+        data = response.json()
+
+        self.assertEqual(4, len(data['users_with_group_name_qs']['data']))
+        self.assertIn('JOIN "auth_user_groups"', data['users_with_group_name_qs']['query'])
+        self.assertIn('JOIN "auth_group"', data['users_with_group_name_qs']['query'])
+
+        self.assertEqual(5, len(data['groups_with_users_qs']['data']))
+        self.assertIn('JOIN "auth_user_groups"', data['groups_with_users_qs']['query'])
+        self.assertIn('JOIN "auth_user"', data['groups_with_users_qs']['query'])

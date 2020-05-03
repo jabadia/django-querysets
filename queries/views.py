@@ -232,3 +232,18 @@ def get_single(request):
             ('user_using_latest', user_using_latest),
         ], ctx.captured_queries)
     })
+
+
+def joins(request):
+    users_with_group_name_qs = User.objects.all().values('username', 'first_name', 'last_name', 'groups__name')
+    groups_with_users_qs = Group.objects.all().values('name', 'user__username')
+
+    return JsonResponse({
+        name: {
+            'data': list(qs),
+            'query': str(qs.query),
+        } for name, qs in [
+            ('users_with_group_name_qs', users_with_group_name_qs),
+            ('groups_with_users_qs', groups_with_users_qs),
+        ]
+    })

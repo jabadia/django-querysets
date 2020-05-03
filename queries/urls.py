@@ -16,4 +16,5 @@ urlpatterns = [
     path('limit', views.limit),
     path('orderby', views.orderby),
     path('get_single', views.get_single),
+    path('joins', views.joins),
 ]
