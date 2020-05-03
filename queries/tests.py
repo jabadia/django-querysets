@@ -125,3 +125,16 @@ class TestViews(TestCase):
         self.assertIn('LIMIT 10', data['limit_qs']['query'])
         self.assertIn('LIMIT 10 OFFSET 10', data['offset_limit_qs']['query'])
 
+    def test__orderby(self):
+        with self.assertNumQueries(4):
+            response = self.client.get('/queries/orderby')
+        self.assertEqual(200, response.status_code)
+        data = response.json()
+
+        self.assertIn('ORDER BY "auth_user"."date_joined" ASC', data['by_date_joined_qs']['query'])
+        self.assertIn(
+            'ORDER BY "auth_user"."date_joined" ASC, "auth_user"."last_name" DESC',
+            data['by_multiple_qs']['query']
+        )
+        self.assertIn('ORDER BY "auth_user"."date_joined" DESC', data['by_reverse_date_joined_qs']['query'])
+        self.assertIn('ORDER BY RANDOM() ASC', data['by_random_qs']['query'])

@@ -13,4 +13,5 @@ urlpatterns = [
     path('comparison', views.comparison),
     path('between', views.between),
     path('limit', views.limit),
+    path('orderby', views.orderby),
 ]

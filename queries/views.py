@@ -178,3 +178,22 @@ def limit(request):
             ('offset_limit_qs', offset_limit_qs),
         ]
     })
+
+
+def orderby(request):
+    by_date_joined_qs = User.objects.order_by('date_joined')
+    by_multiple_qs = User.objects.order_by('date_joined', '-last_name')
+    by_reverse_date_joined_qs = User.objects.order_by('date_joined').reverse()
+    by_random_qs = User.objects.order_by('?')
+
+    return JsonResponse({
+        name: {
+            'data': list(qs.values()),
+            'query': str(qs.query),
+        } for name, qs in [
+            ('by_date_joined_qs', by_date_joined_qs),
+            ('by_multiple_qs', by_multiple_qs),
+            ('by_reverse_date_joined_qs', by_reverse_date_joined_qs),
+            ('by_random_qs', by_random_qs),
+        ]
+    })
