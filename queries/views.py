@@ -191,6 +191,7 @@ def limit(request):
 
 
 def orderby(request):
+    # https://davit.tech/django-queryset-examples/#section-order
     by_date_joined_qs = User.objects.order_by('date_joined')
     by_multiple_qs = User.objects.order_by('date_joined', '-last_name')
     by_reverse_date_joined_qs = User.objects.order_by('date_joined').reverse()
@@ -210,6 +211,7 @@ def orderby(request):
 
 
 def get_single(request):
+    # https://davit.tech/django-queryset-examples/#section-single-object
     with CaptureQueriesContext(connection) as ctx:
         user_using_limit = User.objects.all()[0]
         user_using_get = User.objects.get(pk=1)
