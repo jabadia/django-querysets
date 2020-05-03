@@ -206,3 +206,29 @@ def orderby(request):
             ('by_random_qs', by_random_qs),
         ]
     })
+
+
+def get_single(request):
+    with CaptureQueriesContext(connection) as ctx:
+        user_using_limit = User.objects.all()[0]
+        user_using_get = User.objects.get(pk=1)
+        user_using_first = User.objects.order_by('date_joined', '-first_name').first()
+        user_using_last = User.objects.order_by('first_name').last()
+        user_using_earliest = User.objects.earliest('date_joined', '-first_name')
+        user_using_latest = User.objects.latest('first_name')
+
+    assert 6 == len(ctx.captured_queries), "bad number of queries executed"
+
+    return JsonResponse({
+        name: {
+            'data': model_to_dict(user_instance, exclude=['groups', 'user_permissions']),
+            'query': query['sql'],
+        } for (name, user_instance), query in zip([
+            ('user_using_limit', user_using_limit),
+            ('user_using_get', user_using_get),
+            ('user_using_first', user_using_first),
+            ('user_using_last', user_using_last),
+            ('user_using_earliest', user_using_earliest),
+            ('user_using_latest', user_using_latest),
+        ], ctx.captured_queries)
+    })

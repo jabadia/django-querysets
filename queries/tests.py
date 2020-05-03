@@ -138,3 +138,16 @@ class TestViews(TestCase):
         )
         self.assertIn('ORDER BY "auth_user"."date_joined" DESC', data['by_reverse_date_joined_qs']['query'])
         self.assertIn('ORDER BY RANDOM() ASC', data['by_random_qs']['query'])
+
+    def test__get_single(self):
+        with self.assertNumQueries(6):
+            response = self.client.get('/queries/get_single')
+        self.assertEqual(200, response.status_code)
+        data = response.json()
+
+        self.assertIn('LIMIT 1', data['user_using_limit']['query'])
+        self.assertIn('WHERE "auth_user"."id" = 1', data['user_using_get']['query'])
+        self.assertIn('ORDER BY "auth_user"."date_joined" ASC, "auth_user"."first_name" DESC LIMIT 1', data['user_using_first']['query'])
+        self.assertIn('ORDER BY "auth_user"."first_name" DESC LIMIT 1', data['user_using_last']['query'])
+        self.assertIn('ORDER BY "auth_user"."date_joined" ASC, "auth_user"."first_name" DESC LIMIT 1', data['user_using_earliest']['query'])
+        self.assertIn('ORDER BY "auth_user"."first_name" DESC LIMIT 1', data['user_using_latest']['query'])
