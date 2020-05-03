@@ -143,10 +143,12 @@ LOGGING = {
         },
         '': {
             'handlers': ['console'],
+        },
+        'queries': {
             'level': 'DEBUG',
         },
         'django.db': {
-            'level': 'DEBUG',  # log SQL queries
+            # 'level': 'DEBUG',  # log SQL queries
         },
     }
 }
