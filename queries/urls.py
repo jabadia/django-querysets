@@ -3,7 +3,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index),
+    path('', views.index, name='queries-index'),
     path('first', views.first),
     path('and_operation', views.and_operation),
     path('or_operation', views.or_operation),
