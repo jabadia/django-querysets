@@ -65,4 +65,14 @@ class TestViews(TestCase):
         self.assertCountEqual(data['qs']['data'], data['bulk']['data'].values())
         self.assertEqual(data['qs']['query'], data['bulk']['query'])
 
+    def test__is_null(self):
+        with self.assertNumQueries(2):
+            response = self.client.get('/queries/is_null')
+        self.assertEqual(200, response.status_code)
+        data = response.json()
 
+        self.assertEqual(0, len(data['is_null_qs']['data']))
+        self.assertEqual(2, len(data['is_not_null_qs']['data']))
+
+        self.assertIn('IS NULL', data['is_null_qs']['query'])
+        self.assertIn('IS NOT NULL', data['is_not_null_qs']['query'])

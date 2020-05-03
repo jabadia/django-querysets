@@ -89,3 +89,18 @@ def in_filtering(request):
             'query': ctx.captured_queries[0]['sql'],
         }
     })
+
+
+def is_null(request):
+    # https://davit.tech/django-queryset-examples/#section-isnull
+    is_null_qs = User.objects.filter(first_name__isnull=True)
+    is_not_null_qs = User.objects.filter(first_name__isnull=False)
+    return JsonResponse({
+        name: {
+            'data': list(qs.values()),
+            'query': str(qs.query),
+        } for name, qs in [
+            ('is_null_qs', is_null_qs),
+            ('is_not_null_qs', is_not_null_qs),
+        ]
+    })
