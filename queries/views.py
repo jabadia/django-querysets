@@ -1,4 +1,5 @@
 import logging
+from datetime import timedelta
 
 from django.db import connection
 from django.db.models import Q
@@ -6,6 +7,7 @@ from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.test.utils import CaptureQueriesContext
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
@@ -142,5 +144,21 @@ def comparison(request):
             ('lt_qs', lt_qs),
             ('gte_qs', gte_qs),
             ('lte_qs', lte_qs),
+        ]
+    })
+
+
+def between(request):
+    # https://davit.tech/django-queryset-examples/#section-between
+    today = timezone.now()
+    two_weeks_ago = today - timedelta(days=14)
+    between_qs = User.objects.filter(date_joined__range=[two_weeks_ago, today])
+
+    return JsonResponse({
+        name: {
+            'data': list(qs.values()),
+            'query': str(qs.query),
+        } for name, qs in [
+            ('between_qs', between_qs),
         ]
     })

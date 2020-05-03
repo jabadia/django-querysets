@@ -106,3 +106,12 @@ class TestViews(TestCase):
         self.assertEqual(1, len(data['gte_qs']['data']))
         self.assertIn(" <= ", data['lte_qs']['query'])
         self.assertEqual(2, len(data['lte_qs']['data']))
+
+    def test__between(self):
+        with self.assertNumQueries(1):
+            response = self.client.get('/queries/between')
+        self.assertEqual(200, response.status_code)
+        data = response.json()
+
+        self.assertIn(' BETWEEN ', data['between_qs']['query'])
+        self.assertEqual(2, len(data['between_qs']['data']))

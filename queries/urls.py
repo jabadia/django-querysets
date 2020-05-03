@@ -11,4 +11,5 @@ urlpatterns = [
     path('is_null', views.is_null),
     path('like', views.like),
     path('comparison', views.comparison),
+    path('between', views.between),
 ]
