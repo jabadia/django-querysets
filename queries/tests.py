@@ -76,3 +76,18 @@ class TestViews(TestCase):
 
         self.assertIn('IS NULL', data['is_null_qs']['query'])
         self.assertIn('IS NOT NULL', data['is_not_null_qs']['query'])
+
+    def test__like(self):
+        with self.assertNumQueries(4):
+            response = self.client.get('/queries/like')
+        self.assertEqual(200, response.status_code)
+        data = response.json()
+
+        self.assertIn("LIKE Jo%", data['startswith_qs']['query'])
+        self.assertEqual(1, len(data['startswith_qs']['data']))
+        self.assertIn("LIKE %ya", data['endswith_qs']['query'])
+        self.assertEqual(0, len(data['endswith_qs']['data']))
+        self.assertIn("LIKE %oh%", data['contains_qs']['query'])
+        self.assertEqual(1, len(data['contains_qs']['data']))
+        self.assertIn("REGEXP ^D.e$", data['regex_qs']['query'])
+        self.assertEqual(2, len(data['regex_qs']['data']))

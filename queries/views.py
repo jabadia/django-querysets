@@ -104,3 +104,23 @@ def is_null(request):
             ('is_not_null_qs', is_not_null_qs),
         ]
     })
+
+
+def like(request):
+    # https://davit.tech/django-queryset-examples/#section-like
+    startswith_qs = User.objects.filter(first_name__startswith="Jo")
+    endswith_qs = User.objects.filter(first_name__endswith="yan")
+    contains_qs = User.objects.filter(first_name__contains="oh")
+    regex_qs = User.objects.filter(last_name__regex=r"^D.e$")
+
+    return JsonResponse({
+        name: {
+            'data': list(qs.values()),
+            'query': str(qs.query),
+        } for name, qs in [
+            ('startswith_qs', startswith_qs),
+            ('endswith_qs', endswith_qs),
+            ('contains_qs', contains_qs),
+            ('regex_qs', regex_qs),
+        ]
+    })

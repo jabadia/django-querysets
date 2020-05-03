@@ -9,4 +9,5 @@ urlpatterns = [
     path('not_equal', views.not_equal),
     path('in_filtering', views.in_filtering),
     path('is_null', views.is_null),
+    path('like', views.like),
 ]
