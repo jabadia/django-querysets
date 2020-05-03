@@ -12,4 +12,5 @@ urlpatterns = [
     path('like', views.like),
     path('comparison', views.comparison),
     path('between', views.between),
+    path('limit', views.limit),
 ]

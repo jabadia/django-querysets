@@ -162,3 +162,19 @@ def between(request):
             ('between_qs', between_qs),
         ]
     })
+
+
+def limit(request):
+    # https://davit.tech/django-queryset-examples/#section-limit
+    limit_qs = User.objects.all()[:10]
+    offset_limit_qs = User.objects.all()[10:20]
+
+    return JsonResponse({
+        name: {
+            'data': list(qs.values()),
+            'query': str(qs.query),
+        } for name, qs in [
+            ('limit_qs', limit_qs),
+            ('offset_limit_qs', offset_limit_qs),
+        ]
+    })

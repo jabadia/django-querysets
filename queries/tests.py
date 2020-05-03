@@ -115,3 +115,13 @@ class TestViews(TestCase):
 
         self.assertIn(' BETWEEN ', data['between_qs']['query'])
         self.assertEqual(2, len(data['between_qs']['data']))
+
+    def test__limit(self):
+        with self.assertNumQueries(2):
+            response = self.client.get('/queries/limit')
+        self.assertEqual(200, response.status_code)
+        data = response.json()
+
+        self.assertIn('LIMIT 10', data['limit_qs']['query'])
+        self.assertIn('LIMIT 10 OFFSET 10', data['offset_limit_qs']['query'])
+
