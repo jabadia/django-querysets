@@ -7,6 +7,15 @@ import logging
 
 class TestViews(TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        print('database configuration')
+        print('-' * 90)
+        for key, value in settings.DATABASES['default'].items():
+            print(f'{key:20}: {value}')
+        print('-' * 90)
+
     def setUp(self) -> None:
         super().setUp()
         # need to run tests with --debug-mode for this setting to be effective
