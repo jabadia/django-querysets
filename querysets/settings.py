@@ -158,3 +158,5 @@ LOGGING = {
         },
     }
 }
+
+SETTINGS_FILE = os.path.basename(__file__)
