@@ -1,11 +1,11 @@
-![](https://github.com/jabadia/django-querysets/workflows/main/badge.svg)
+![](https://github.com/actions/jabadia/django-querysets/workflows/main/badge.svg)
 
 # Purpose
 This repo is a sample for:
 a) writing different types of SQL queries using Django ORM, following the examples in https://davit.tech/django-queryset-examples
 b) running unit-tests in GitHub Actions including PostgreSQL
 
-# Random notes
+# Random n1otes
 ## How to see queries
 
 ```
