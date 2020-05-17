@@ -7,7 +7,7 @@ a) writing different types of SQL queries using Django ORM, following the exampl
 
 b) running unit-tests in GitHub Actions including PostgreSQL
 
-# Random n1otes
+# Random notes
 ## How to see queries
 
 ```
