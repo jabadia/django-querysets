@@ -25,12 +25,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.7
+    - name: set up python 3.7
       uses: actions/setup-python@v1
       with:
         python-version: 3.7
     - uses: dschep/install-pipenv-action@v1
-    - name: Run pipenv
+    - name: pipenv install
       run: |
         pipenv install
 
