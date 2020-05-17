@@ -1,4 +1,4 @@
-![](https://github.com/actions/jabadia/django-querysets/workflows/main/badge.svg)
+![](https://github.com/jabadia/django-querysets/workflows/.github/workflows/main.yml/badge.svg)
 
 # Purpose
 This repo is a sample for:
