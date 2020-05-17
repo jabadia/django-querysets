@@ -7,6 +7,11 @@ import logging
 
 class TestViews(TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._print_db_settings()
+
     def setUp(self) -> None:
         super().setUp()
         # need to run tests with --debug-mode for this setting to be effective
@@ -16,6 +21,14 @@ class TestViews(TestCase):
     def tearDown(self) -> None:
         super().tearDown()
         logging.getLogger('django.db').setLevel(logging.INFO)
+
+    @classmethod
+    def _print_db_settings(cls):
+        print('database configuration')
+        print('-' * 90)
+        for key, value in settings.DATABASES['default'].items():
+            print(f'{key:20}: {value}')
+        print('-' * 90)
 
     def _assert_all_results_and_sqls_equal(self, data):
         # check that the result and SQL query is the same in all querysets
