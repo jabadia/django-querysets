@@ -1,15 +1,19 @@
-# How to see queries
 
-https://davit.tech/django-queryset-examples
+# Purpose
+This repo is a sample for:
+a) writing different types of SQL queries using Django ORM, following the examples in https://davit.tech/django-queryset-examples
+b) running unit-tests in GitHub Actions including PostgreSQL
 
+# Random notes
+## How to see queries
 
-1. Using logging
-
+```
+Using logging
 django.db -> DEBUG
-
-
 getLogger('django.db').setLevel(logging.DEBUG)
-
-
 from django.test.utils import CaptureQueriesContext
 
+        - "postgres"
+#        - "-c"
+#        - "log_statement=all"
+```
