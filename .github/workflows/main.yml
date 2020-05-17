@@ -1,12 +1,11 @@
 name: run unit tests
 on: push
 
+env:
+  POSTGRES_PASSWORD: secretpass
+
 # based on https://github.com/actions/example-services/blob/master/.github/workflows/postgres-service.yml
-
 jobs:
-  env:
-    POSTGRES_PASSWORD: secretpass
-
   test:
     runs-on: ubuntu-latest
 
