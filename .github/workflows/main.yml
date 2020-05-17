@@ -38,6 +38,6 @@ jobs:
       run: |
         DJANGO_SETTINGS_MODULE=querysets.test_settings pipenv run python manage.py test
       env:
-        POSTGRES_HOST: postgres
+        POSTGRES_HOST: localhost
         POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
         POSTGRES_PASSWORD: secretpass
