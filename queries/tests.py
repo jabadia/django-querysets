@@ -1,6 +1,7 @@
 import json
 
 from django.test import TestCase
+from django.conf import settings
 import logging
 
 
@@ -10,6 +11,7 @@ class TestViews(TestCase):
         super().setUp()
         # need to run tests with --debug-mode for this setting to be effective
         # logging.getLogger('django.db').setLevel(logging.DEBUG)
+        self.assertEqual(settings.SETTINGS_FILE, 'test_settings.py')
 
     def tearDown(self) -> None:
         super().tearDown()
