@@ -2,11 +2,12 @@ import logging
 from datetime import timedelta
 
 import django.urls as urls
+from django.conf import settings
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import connection
 from django.db.models import Q, Count
 from django.forms import model_to_dict
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.contrib.auth.models import User, Group
 from django.shortcuts import render
 from django.test.utils import CaptureQueriesContext
@@ -19,7 +20,10 @@ def index(request):
     resolver = urls.get_resolver()
     all_urls = ['/' + v[0][0][0] for v in resolver.reverse_dict.values()]
     all_urls.reverse()
-    return render(request, 'queries/index.html', {'urls': all_urls})
+    return render(request, 'queries/index.html', {
+        'urls': all_urls,
+        'database': settings.DATABASES['default']
+    })
 
 
 def first(request):
