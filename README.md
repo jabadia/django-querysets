@@ -2,7 +2,9 @@
 
 # Purpose
 This repo is a sample for:
+
 a) writing different types of SQL queries using Django ORM, following the examples in https://davit.tech/django-queryset-examples
+
 b) running unit-tests in GitHub Actions including PostgreSQL
 
 # Random n1otes
