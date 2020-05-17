@@ -1,3 +1,4 @@
+![](https://github.com/jabadia/django-querysets/workflows/main/badge.svg)
 
 # Purpose
 This repo is a sample for:
