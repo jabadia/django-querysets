@@ -4,14 +4,15 @@ on: push
 # based on https://github.com/actions/example-services/blob/master/.github/workflows/postgres-service.yml
 
 jobs:
+  env:
+    POSTGRES_PASSWORD: secretpass
+
   test:
     runs-on: ubuntu-latest
 
     services:
       postgres:
         image: postgres:11.1
-        env:
-          POSTGRES_PASSWORD: secretpass
         ports:
         - 5556:5432
         options: >-
@@ -37,4 +38,3 @@ jobs:
       env:
         POSTGRES_HOST: localhost
         POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
-        POSTGRES_PASSWORD: secretpass
