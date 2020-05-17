@@ -1,0 +1,43 @@
+name: run unit tests
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: secretpass
+        ports:
+        - 5556:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - uses: dschep/install-pipenv-action@v1
+    - name: Run pipenv
+      run: |
+        pipenv install
+
+    - name: run tests
+      run: |
+        DJANGO_SETTINGS_MODULE=querysets.test_settings pipenv run python manage.py test
+      env:
+        POSTGRES_HOST: postgres
+        POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+        POSTGRES_PASSWORD: secretpass
