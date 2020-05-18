@@ -66,7 +66,7 @@ pipenv run python manage.py migrate
 pipenv run python manage.py runserver 7777
 
 ```
-open your browser pointing to [http://localhost/7777](http://localhost/7777)
+open your browser pointing to [http://localhost:7777](http://localhost:7777)
 
 
 # How to see queries
