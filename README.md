@@ -7,8 +7,6 @@ a) writing different types of SQL queries using Django ORM, following the exampl
 
 b) running unit-tests in GitHub Actions including PostgreSQL
 
-# Random notes
-## How to see queries
 # How to use
 
 ## 1. Download the repo:
@@ -71,14 +69,52 @@ pipenv run python manage.py runserver 7777
 open your browser pointing to [http://localhost/7777](http://localhost/7777)
 
 
+# How to see queries
+
+## 1. LOGGING options in settings
+In `settings.py` look for the `LOGGING` key and enable `django.db` DEBUG level
+```
+LOGGING = {
+    ...
+    'loggers': {
+        ...
+        'django.db': {
+            'level': 'DEBUG',  # log SQL queries
+        },
+    },
+}
+```
+
+## 2. Using logging selectively: getLogger('django.db').setLevel()
+In any place of the code where you want to log queries, enable it by writing:
 
 ```
-Using logging
-django.db -> DEBUG
 getLogger('django.db').setLevel(logging.DEBUG)
-from django.test.utils import CaptureQueriesContext
+```
 
+## 3. CaptureQueriesContext
+Using a query capture context manager in one particular place of the code:
+
+```
+from django.test.utils import CaptureQueriesContext
+from django.db import connection
+...
+
+def one_function():
+    ...
+    with CaptureQueriesContext(connection( as queries:
+        < call function or execute code that launches queries here >
+        ...
+
+    for query in queries.captured_queries:
+        print(query)
+```
+
+## 4. Enabling server-side logging in postgres (easier in a docker container hosted postgres)
+
+In `docker-compose.yml` uncomment the logging option:
+```
         - "postgres"
-#        - "-c"
-#        - "log_statement=all"
+#        - "-c"                     # uncomment this
+#        - "log_statement=all"      # uncomment this
 ```
